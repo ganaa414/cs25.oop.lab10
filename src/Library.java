@@ -1,45 +1,48 @@
 import java.util.*;
 
-class Book {
-	private String title;
-	private int year;
+public class Library {
 
-	public Book(String title, int year) {
-		this.title = title;
-		this.year = year;
-	}
+    private List<Book> books = new ArrayList<>();
 
-	public String getTitle() {
-		return title;
-	}
+    public void addBook(Book b) {
+        books.add(b);
+    }
 
-	public int getYear() {
-		return year;
-	}
+    public Iterable<Book> bookShelf(int minYear) {
+        return new BookShelf(minYear);
+    }
+
+    private class BookShelf implements Iterable<Book> {
+        private int minYear;
+
+        public BookShelf(int minYear) {
+            this.minYear = minYear;
+        }
+
+        @Override
+        public Iterator<Book> iterator() {
+            return books.stream()
+                    .filter(book -> book.getYear() >= minYear)
+                    .iterator();
+        }
+    }
 }
 
-public class Library {
-	private List<Book> books = new ArrayList<>();
+class Book {
+    private String name;
+    private int year;
 
-	public void addBook(String title, int year) {
-		books.add(new Book(title, year));
-	}
+    public Book(String name, int year) {
+        this.name = name;
+        this.year = year;
+    }
 
-	class BookShelf implements Iterable<Book> {
-		private int minYear;
+    public int getYear() {
+        return year;
+    }
 
-		public BookShelf(int minYear) {
-			this.minYear = minYear;
-		}
-
-		@Override
-		public Iterator<Book> iterator() {
-			// Хэрэгжүүл: minYear-с хойшхи номнуудыг буцаа
-			return null; // Оруул
-		}
-	}
-
-	public BookShelf getRecentBooks(int minYear) {
-		return new BookShelf(minYear);
-	}
+    @Override
+    public String toString() {
+        return name + ": " + year;
+    }
 }
